@@ -15,8 +15,7 @@
 
 include "ithem/ithem.php";
 
-$core = new ithem;
-$core->init();
-$core->format_retrieve(null,null,null,null);
+$core = new ithem();
+$core->format(null,null,null,null);
 
 ?>

@@ -1,16 +1,13 @@
 <?
 /*
  * Vendor:      lambia
- * Namespace:   ithem
  * Class:       ithem (core)
- * Version:     release-beta 0.1
+ * Version:     Release: beta 0.1
  * Status:      sketch
  *
  * Author:      Lambia
  * Link:        lambia.it
  * Date:        06/10/2016
- *
- * @returns {string} $token - contiene la risposta in JSON
  *
  * ToDo list
  * .. Usare namespace?
@@ -30,10 +27,20 @@ class ithem {
     public $sql2 = "INSERT INTO ithems (name,value,children) VALUES ('OOP','query',1)"; //A
     public $db;
     
-    function init() {
-        $this->db = new db(); //B
+    function __construct() {
+       $this->db = new db(); //B
     }
     
+    /*
+     * Get the list of items in DB
+     *
+     * @param   {int/nll}   $limit  Get {n} fields of this type in this order
+     * @param   {str/nll}   $campi  Get n {fields} of this type in this order
+     * @param   {str/nll}   $type   Get n fields of this {type} in this order
+     * @param   {str/nll}   $order  Get n fields of this type in this {order}
+     *
+     * @return  {arr}       $array  Bidimensional array with the list
+     */ 
     function get_list($limit, $campi, $type, $order) { //D
         $sql = "SELECT ".(is_string($campi) ? "(".$campi.")" : "*")." FROM ithems".(is_string($type) ? " WHERE (type='".$type."')" : "").(is_numeric($limit) ? " LIMIT ".$limit : "").(is_string($order) ? " ORDER BY ".$order : "");
                 
@@ -53,7 +60,32 @@ class ithem {
         }
     }
     
-    function format_array($array) { //F1
+    /*
+     * Echoes formatted contents, provided in 2D-array or got via query.
+     * It's a Variadic Function (emulate C-like overloading), so accepts 1 or 4 arguments
+     * @todo    {return}    $array  Instead of echoing everything
+     * @todo    {throw}     $array  Instead of returning
+     *
+     * @param   {arr}       $array  Bidimensional array with the list
+     *
+     * @param   {int/nll}   $limit  Get {n} fields of this type in this order
+     * @param   {str/nll}   $campi  Get n {fields} of this type in this order
+     * @param   {str/nll}   $type   Get n fields of this {type} in this order
+     * @param   {str/nll}   $order  Get n fields of this type in this {order}
+     *
+     * @return  {nll/int}           Code error (-1) or null
+     *
+     */
+    function format() {
+        if(1==func_num_args()) {
+            $array = func_get_arg(0);
+        } else if (4==func_num_args()) {
+            $array = $this->get_list(func_get_arg(0), func_get_arg(1), func_get_arg(2), func_get_arg(3));
+        } else {
+            //throw new Exception("Fatal error: ithem/format only accepts 1 or 4 arguments. Provided {".func_num_args()."}");
+            return -1;
+        }
+        
         $c = 0;
         while ($c < count($array)) {
             if("img"==$array[$c]['type']) { //G
@@ -65,12 +97,7 @@ class ithem {
             }
             $c++;
         }
-    }
-    
-    function format_retrieve($limit, $campi, $type, $order) { //F2
-        $array = $this->get_list($limit, $campi, $type, $order);
-        $this->format_array($array);
+        return null;
     }
 }
-
 ?>
