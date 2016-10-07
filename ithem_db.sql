@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Creato il: Ott 07, 2016 alle 16:52
+-- Creato il: Ott 07, 2016 alle 21:40
 -- Versione del server: 10.1.13-MariaDB
 -- Versione PHP: 7.0.5
 
@@ -49,9 +49,11 @@ INSERT INTO `ithems` (`id`, `name`, `value`, `type`, `rel`, `children`, `born`, 
 (3, 'Signal', 'static/signal.png', 'img', 0, 0, '2016-10-06 15:57:17', '2016-10-07 14:11:51'),
 (16, 'google', 'http://wwww.google.it', 'lnk', 0, 0, '2016-10-06 16:02:01', '2016-10-06 16:02:01'),
 (17, 'principale', '', 'men', 0, 1, '2016-10-07 12:58:19', '2016-10-07 12:58:19'),
-(18, 'voce1', 'google.it', 'men-lnk', 17, 0, '2016-10-07 12:58:58', '2016-10-07 13:38:07'),
-(19, 'voce2', 'google.it', 'men-lnk', 17, 0, '2016-10-07 12:59:04', '2016-10-07 13:38:11'),
-(20, 'voce3', 'google.it', 'men-lnk', 17, 0, '2016-10-07 12:59:10', '2016-10-07 13:38:14');
+(18, 'voce1', 'http://wwww.google.it', 'men-lnk', 17, 0, '2016-10-07 12:58:58', '2016-10-07 19:13:56'),
+(19, 'voce2', 'http://wwww.google.it', 'men-lnk', 17, 0, '2016-10-07 12:59:04', '2016-10-07 19:13:58'),
+(20, 'voce3', 'http://wwww.google.it', 'men-lnk', 17, 0, '2016-10-07 12:59:10', '2016-10-07 19:14:00'),
+(21, 'index', 'ithem', 'page', -1, 0, '2016-10-07 12:59:10', '2016-10-07 18:11:07'),
+(22, 'about', 'about:ithem', 'page', -1, 0, '2016-10-07 12:59:10', '2016-10-07 18:11:11');
 
 --
 -- Indici per le tabelle scaricate
@@ -71,7 +73,7 @@ ALTER TABLE `ithems`
 -- AUTO_INCREMENT per la tabella `ithems`
 --
 ALTER TABLE `ithems`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
