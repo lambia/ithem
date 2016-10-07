@@ -131,7 +131,7 @@ class ithem {
             } else if (0<$array[$c]['rel']) {       //Child items //I
                 if( "men-lnk"==$array[$c]['type'] ) {               //M
                     echo "<li>";
-                    echo "<a href='".$array[$c]['value']."' id='link".$array[$c]['id']."'>".$array[$c]['name']."</a>"
+                    echo "<a href='".$array[$c]['value']."' id='link".$array[$c]['id']."'>".$array[$c]['name']."</a>";
                     echo "</li>\n";
                 }
             }
