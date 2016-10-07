@@ -89,28 +89,24 @@ class ithem {
         
         $c = 0;
         while ($c < count($array)) {
-            if("img"==$array[$c]['type']) { //G
-                echo "<img src='".$array[$c]['value']."' alt='".$array[$c]['name']."' title='".$array[$c]['name']."' />\n";
-            } else if("txt"==$array[$c]['type']) {
-                echo $array[$c]['value']."\n";
-            } else if("lnk"==$array[$c]['type']) {
-                echo "<a href='".$array[$c]['value']."'>".$array[$c]['name']."</a>\n";
-            } else if ("js"==$array[$c]['type']) {
-                echo "<script src='".$array[$c]['value']."'></script>\n";
-            } else if ("men"==$array[$c]['type'] && is_numeric($array[$c]['rel'])) { //ricorsiva a se stessa //fx riutilizzabile per children
-                echo "<ul id='".$array[$c]['type'].$array[$c]['id']."' class='".$array[$c]['type']."'>\n";
-                
-                //$this->format(null,null,null,$array[$c]['id'],null);
-                
-                $array_menu = $this->get_list(null,null,null,$array[$c]['id'],null);
-                $c_menu = 0;
-                while ($c_menu < count($array_menu)) {
-                    if( "lnk"==$array_menu[$c_menu]['type'] ) {
-                        echo "<li><a href='".$array_menu[$c_menu]['value']."'>".$array_menu[$c_menu]['value']."</a></li>\n";
-                    }
-                    $c_menu++;
+            if(0==$array[$c]['rel']) {              //Top level items processor
+                if("img"==$array[$c]['type']) { //G
+                    echo "<img src='".$array[$c]['value']."' alt='".$array[$c]['name']."' title='".$array[$c]['name']."' />\n";
+                } else if("txt"==$array[$c]['type']) {
+                    echo $array[$c]['value']."\n";
+                } else if("lnk"==$array[$c]['type']) {
+                    echo "<a href='".$array[$c]['value']."'>".$array[$c]['name']."</a>\n";
+                } else if ("js"==$array[$c]['type']) {
+                    echo "<script src='".$array[$c]['value']."'></script>\n";
+                } else if ("men"==$array[$c]['type'] && is_numeric($array[$c]['rel'])) {
+                    echo "<ul id='".$array[$c]['type'].$array[$c]['id']."' class='".$array[$c]['type']."'>\n";
+                    $this->format(null,null,null,$array[$c]['id'],null);
+                    echo "</ul>\n";
                 }
-                echo "</ul>\n";
+            } else if (0<$array[$c]['rel']) {       //Child items
+                if( "men-lnk"==$array[$c]['type'] ) {   //use space-separated classes, explode and check
+                    echo "<li><a href='".$array[$c]['value']."'>".$array[$c]['value']."</a></li>\n";
+                }
             }
             $c++;
         }
