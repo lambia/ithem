@@ -17,7 +17,8 @@
  * D. variadic - if not campi, campi = *
  * E. prevedere i children (title alt)
  * G. se il campo "type" è presente, prevedere anche overload F2
- * H. separare style strings
+ * I. $classes = explode(" ",$array[$c]['type']); 
+ * I. foreach or in_array 
  */
 
 include "functions.php";
@@ -91,7 +92,7 @@ class ithem {
         while ($c < count($array)) {
             if(0==$array[$c]['rel']) {              //Top level items processor
                 if("img"==$array[$c]['type']) { //G
-                    echo "<img src='".$array[$c]['value']."' alt='".$array[$c]['name']."' title='".$array[$c]['name']."' />\n";
+                    echo "<img src='".$array[$c]['value']."' alt='".$array[$c]['name']."' title='".$array[$c]['name']."' />\n"; //I
                 } else if("txt"==$array[$c]['type']) {
                     echo $array[$c]['value']."\n";
                 } else if("lnk"==$array[$c]['type']) {
@@ -103,8 +104,8 @@ class ithem {
                     $this->format(null,null,null,$array[$c]['id'],null);
                     echo "</ul>\n";
                 }
-            } else if (0<$array[$c]['rel']) {       //Child items
-                if( "men-lnk"==$array[$c]['type'] ) {   //use space-separated classes, explode and check
+            } else if (0<$array[$c]['rel']) {       //Child items //I
+                if( "men-lnk"==$array[$c]['type'] ) {
                     echo "<li><a href='".$array[$c]['value']."'>".$array[$c]['value']."</a></li>\n";
                 }
             }
