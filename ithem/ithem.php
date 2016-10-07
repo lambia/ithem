@@ -21,14 +21,14 @@
  * I. foreach or in_array 
  */
 
-include "functions.php";
+require_once "functions.php";
 
 class ithem {
     public $sql2 = "INSERT INTO ithems (name,value,children) VALUES ('OOP','query',1)"; //A
     public $db;
     
     function __construct() {
-       $this->db = new db(); //B
+       $this->db = new db; //B
     }
     
     /*
@@ -47,12 +47,12 @@ class ithem {
         $sql = "SELECT ".(is_string($fields) ? "(".$fields.")" : "*")." FROM ithems".((is_string($type)||is_numeric($rel)) ? " WHERE (" : "").(is_string($type) ? "type='".$type."'" : "").(is_numeric($rel) ? "rel=".$rel : "").((is_string($type)||is_numeric($rel)) ? ")" : "").(is_numeric($limit) ? " LIMIT ".$limit : "").(is_string($order) ? " ORDER BY ".$order : "");
         
         if($this->db) { //B-?
-            $this->db->query($sql);
-            if(is_object($this->db->result)) {
+            $result = $this->db->query($sql);
+            if(is_object($result)) {
                 $items = array();
                 $c = 0;
-                if ($this->db->result->num_rows > 0) {
-                    while($row = $this->db->result->fetch_assoc()) {
+                if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
                         $items[] = $row;
                         $c++;
                     }

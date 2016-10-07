@@ -13,7 +13,7 @@
  * @returns {string} $token - contiene la risposta in JSON
  *
  * ToDo List
- * 
+ * A. Recuperare parametri durante il setup da un .ini e inserirli qui durante il setup
  */
  
 class settings {
@@ -22,7 +22,7 @@ class settings {
                        "port"=>"3306",
                        "user"=>"root",
                        "pass"=>"",
-                       "db"=>"ithem_db");
+                       "db"=>"ithem_db"); //A
     public $debug = false;
     public $url = "http://localhost/";
 
