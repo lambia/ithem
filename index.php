@@ -12,7 +12,7 @@
  *
  */
 
-include "ithem/ithem.php";
+require_once "ithem/ithem.php";
 
 $core = new ithem;
 $core->format(null,null,null,null,null);
