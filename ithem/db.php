@@ -13,47 +13,45 @@
  * @returns {string} $risultato - commento
  *
  * ToDo List
- * A. testare con il resultset vuoto
- * B. sostituire i die con if(debug){die}else{log}. stilizzare errori.
- * C. testare meglio questo check
- * E. magari chiuderlo nella funzione query, ma poi viene passato il vuoto. testare con memUsage, ma pare che php si liberi da solo
+ * A. prendere parametri da file .ini o da settings
+ * B. sostituire i die con if(debug){die}else{log}
+ * C. && checkare se ancora attiva
+ * D. magari chiuderlo nella funzione query
  * 
  */
 
 class db {
     public $mysqli;
-    //public $result;
+    public $result;
     
     function __construct() {
-        $settings = new settings;
+        $settings = new settings();
         $this->mysqli = new mysqli($settings->db["host"],
                                    $settings->db["user"],
                                    $settings->db["pass"],
-                                   $settings->db["db"]);
+                                   $settings->db["db"]); //A
         if ($this->mysqli->connect_errno) {
-            die("Error: Connect failed.<br/>".$this->mysqli->connect_error."<br/>"); //B
+            die("Connect failed: ".$this->mysqli->connect_error."<br/>"); //B
             exit();
         }
     }
     
     function __destruct() {
-        //if(is_object($this->result) && !$this->mysqli->connect_errno && !$this->mysqli->error) { //E
-        //    $this->result->close(); //D
-        //}
-        if(is_object($this->mysqli) && !$this->mysqli->connect_errno && !$this->mysqli->error) { //C
+        if(is_object($this->result)) {
+            $this->result->close(); //D
+        }
+        if(is_object($this->mysqli)) { //C
             $this->mysqli->close();
         }
     }
     
     function query($query) {
+        /* Select @return resultset */
         if ($query && $result = $this->mysqli->query($query)) {
-            if ($result) {
-                //$this->result = $result; //E
-                //$result->close(); echo memory_get_usage() . "\n"; //E
-                return $result;
-            } else { return -1; }
+            $this->result = $result;
+            return 1;
         } else {
-            die("Error: Wrong query syntax.<br/>".$this->mysqli->error."<br/>"); //B
+            die($this->mysqli->error."<br/>"); //B
             return -1;
         }
     }

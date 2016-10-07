@@ -10,11 +10,12 @@
  * Link:        lambia.it
  * Date:        06/10/2016
  *
+ * @returns {string} $token - contiene la risposta in JSON
  */
 
 include "ithem/ithem.php";
 
-$core = new ithem;
+$core = new ithem();
 $core->format(null,null,null,null,null);
 
 ?>
