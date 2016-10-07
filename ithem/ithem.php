@@ -19,6 +19,14 @@
  * G. se il campo "type" è presente, prevedere anche overload F2
  * I. $classes = explode(" ",$array[$c]['type']); 
  * I. foreach or in_array 
+ * J. to replace select* in future
+ * K. formattare meglio il testo
+ * L. formattare tutto con stringhe prese da settings
+ * M. men-link=lnk
+ *    apici in php, doppi apici in html
+ *    core->format has to return the string (not echo)
+ *    core->format has to accept $tabulation argument
+ *    core->format and get_list has to accept less parameters
  */
 
 require_once "functions.php";
@@ -26,25 +34,41 @@ require_once "functions.php";
 class ithem {
     public $sql2 = "INSERT INTO ithems (name,value,children) VALUES ('OOP','query',1)"; //A
     public $db;
+    public $page;
     
-    function __construct() {
-       $this->db = new db; //B
+    function __construct($filename) {
+        $this->db = new db; //B
+        $this->page = $this->get_list(1, basename($filename,".php"), "page", "-1", null)[0];
     }
     
     /*
      * Get the list of items in DB
      *
-     * @param   {int/nll}   $limit  Get {n} fields of type, x-related in order
-     * @param   {str/nll}   $fields Get n {fields} of type, x-related in order
-     * @param   {str/nll}   $type   Get n fields of {type}, x-related in order
-     * @param   {str/nll}   $rel    Get n fields of type, {x}-related in order
-     * @param   {int/nll}   $order  Get n fields of type, x-related in {order}
+     * @param   {int/nll}   $limit  Get {n} of type, x-related in order, with name
+     * @param   {str/nll}   $name   Get n of type, x-related in order, with {name}
+     * @param   {str/nll}   $type   Get n of {type}, x-related in order, with name
+     * @param   {str/nll}   $rel    Get n of type, {x}-related in order, with name
+     * @param   {int/nll}   $order  Get n of type, x-related in {order}, with name
      *
      * @return  {arr}       $array  Bidimensional array with the list
      */ 
-    function get_list($limit, $fields, $type, $rel, $order) { //D
+    function get_list($limit, $name, $type, $rel, $order) { //D
+        $fields = null; //J
         if(!$rel) { $rel = 0; }
-        $sql = "SELECT ".(is_string($fields) ? "(".$fields.")" : "*")." FROM ithems".((is_string($type)||is_numeric($rel)) ? " WHERE (" : "").(is_string($type) ? "type='".$type."'" : "").(is_numeric($rel) ? "rel=".$rel : "").((is_string($type)||is_numeric($rel)) ? ")" : "").(is_numeric($limit) ? " LIMIT ".$limit : "").(is_string($order) ? " ORDER BY ".$order : "");
+        
+        $sql = "SELECT ".
+            (is_string($fields) ? "('".$fields."')" : "*").
+            " FROM ithems".
+            ((is_string($type)||is_numeric($rel)||is_string($fields)) ? " WHERE (" : "").
+            (is_string($type) ? "type='".$type."'" : "").
+            ((is_string($type)&&(is_numeric($rel)||is_string($fields))) ? " AND " : "").
+            (is_numeric($rel) ? "rel=".$rel : "").
+            ((is_string($type)&&is_numeric($rel)&&is_string($name)) ? " AND " : "").
+            (is_string($name) ? "name='".$name."'" : "").
+            
+            ((is_string($type)||is_numeric($rel)) ? ")" : "").
+            (is_numeric($limit) ? " LIMIT ".$limit : "").
+            (is_string($order) ? " ORDER BY ".$order : "");
         
         if($this->db) { //B-?
             $result = $this->db->query($sql);
@@ -90,13 +114,13 @@ class ithem {
         
         $c = 0;
         while ($c < count($array)) {
-            if(0==$array[$c]['rel']) {              //Top level items processor
+            if(0==$array[$c]['rel']) {              //Top level items processor //L
                 if("img"==$array[$c]['type']) { //G
-                    echo "<img src='".$array[$c]['value']."' alt='".$array[$c]['name']."' title='".$array[$c]['name']."' />\n"; //I
-                } else if("txt"==$array[$c]['type']) {
+                    echo "<img src='".$array[$c]['value']."' alt='".$array[$c]['name']."' title='".$array[$c]['name']."' id='img".$array[$c]['id']."' />\n"; //I
+                } else if("txt"==$array[$c]['type']) { //K
                     echo $array[$c]['value']."\n";
-                } else if("lnk"==$array[$c]['type']) {
-                    echo "<a href='".$array[$c]['value']."'>".$array[$c]['name']."</a>\n";
+                } else if("lnk"==$array[$c]['type']) {              //M
+                    echo "<a href='".$array[$c]['value']."' id='link".$array[$c]['id']."'>".$array[$c]['name']."</a>\n";
                 } else if ("js"==$array[$c]['type']) {
                     echo "<script src='".$array[$c]['value']."'></script>\n";
                 } else if ("men"==$array[$c]['type'] && is_numeric($array[$c]['rel'])) {
@@ -105,8 +129,10 @@ class ithem {
                     echo "</ul>\n";
                 }
             } else if (0<$array[$c]['rel']) {       //Child items //I
-                if( "men-lnk"==$array[$c]['type'] ) {
-                    echo "<li><a href='".$array[$c]['value']."'>".$array[$c]['value']."</a></li>\n";
+                if( "men-lnk"==$array[$c]['type'] ) {               //M
+                    echo "<li>";
+                    echo "<a href='".$array[$c]['value']."' id='link".$array[$c]['id']."'>".$array[$c]['name']."</a>"
+                    echo "</li>\n";
                 }
             }
             $c++;
