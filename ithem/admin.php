@@ -29,13 +29,40 @@ foreach ($list as $item) {
 <input type="text" value="<?=$item['name']?>" />
 <input type="text" value="<?=$item['value']?>" />
 <select>
-    <option value=""><?=$item['type']?></option>
+<?
+$types = array_unique(array_column($list, 'type'));
+foreach($types as $type) {
+    echo "<option value='$type'";
+    if($type == $item['type']) {
+        echo "selected='selected'";
+    }
+    echo ">".$type."</option>";
+}
+?>
 </select>
 <select>
-    <option value=""><?=$item['rel']?></option>
+<?
+$rels = array_unique(array_column($list, 'rel'));
+foreach($rels as $rel) {
+    echo "<option value='$rel'";
+    if($rel == $item['rel']) {
+        echo "selected='selected'";
+    }
+    echo ">".$rel."</option>";
+}
+?>
 </select>
 <select>
-    <option value=""><?=$item['children']?></option>
+<?
+$children = array_unique(array_column($list, 'children'));
+foreach($children as $child) {
+    echo "<option value='$child'";
+    if($child == $item['children']) {
+        echo "selected='selected'";
+    }
+    echo ">".$child."</option>";
+}
+?>
 </select>
 <br/>
 
