@@ -27,6 +27,7 @@
  *    core->format has to return the string (not echo)
  *    core->format has to accept $tabulation argument
  *    core->format and get_list has to accept less parameters
+ * N. rel come prima: va impostato a 0 come argomento, altrimenti se null funziona da *
  */
 
 require_once "functions.php";
@@ -38,7 +39,9 @@ class ithem {
     
     function __construct($filename) {
         $this->db = new db; //B
-        $this->page = $this->get_list(1, basename($filename,".php"), "page", "-1", null)[0];
+        if(count($this->get_list(1, basename($filename,".php"), "page", "-1", null))) {
+            $this->page = $this->get_list(1, basename($filename,".php"), "page", "-1", null)[0];
+        }
     }
     
     /*
@@ -54,7 +57,8 @@ class ithem {
      */ 
     function get_list($limit, $name, $type, $rel, $order) { //D
         $fields = null; //J
-        if(!$rel) { $rel = 0; }
+        if(!$rel) { $rel = 0; } //N
+        else if($rel=="*") { $rel=null; }
         
         $sql = "SELECT ".
             (is_string($fields) ? "('".$fields."')" : "*").
@@ -85,6 +89,11 @@ class ithem {
             } else { /* //C */ }
         }
     }
+    
+    function set_list() {
+        
+    }
+    
     /*
      * Echoes formatted contents, provided in 2D-array or got via query.
      * It's a Variadic Function (emulate C-like overloading), so accepts 1 or 4 arguments
