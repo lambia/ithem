@@ -1,9 +1,9 @@
 <?php
 
 //require_once "ithem/fx.php";
-//$x = new ithem();
+//$x = new core();
 
-class ithem {
+class core {
 	public $name = "core";
 	public $db;
 	public $user;
