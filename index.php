@@ -1,33 +1,38 @@
 <?php
 /*
- * if custom("wrong",..) OR user->query(".. FROM wrong...") -> error
- * page use page_id not id
- *
- * melt page and user
- * should be ithem(1,...)->page/user->db OR page/user->db
- * custom classes with custom db fields
- * custom classes can override default one
- *
  * recursive sons (menu ecc)
  *
  * improve templating
  * error handler -> template
  *
- * show/hide destructors by $settings->debug
- * keep in memory (settings and db)
+ * keep in memory (settings and db). tip: ithem is the beginning.
+ *
+ * if custom("wrong",..) OR user->query(".. FROM wrong...") -> error
+ * page use page_id not id
+ *
+ * melt page and user
+ * should be ithem(1,...)->page/user->db OR page/user->db
+ *
+ * debug: memusage, warning/error level, logs
  */
 
 require_once "ithem/fx.php";
-$db = new db();
-$page = new page(0,$db);
-$user = new user(1,$db);
-$user2= new custom("users",1,$db,"password");
+//$ithem = new ithem();
 
-echo "<br><br>";
+isDebug(true);
+
+$db = new db();
+$page = new page($db,0);
+$user = new user($db,1,"users","password");
+$user2= new user($db,2,"people","");
+
+echo "<br>";
 print_r( $page->sons );
-echo "<br><br>";
+echo "<br>";
 print_r( $user->sons );
-echo "<br><br>";
+echo "<br>";
 print_r( $user2->sons );
+echo "<br>";
+echo "<br>";
 
 ?>

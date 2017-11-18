@@ -6,6 +6,8 @@
  * Log error (and relative $settings)
  */
 
+$debug=false;
+
 function __autoload($class_name) {
     include $class_name . '.php';
 }
@@ -21,13 +23,25 @@ function warning($string) {
 
 function queryError($string, $die=null) { 
     //echo 'Connection failed:<br>' . $e->getMessage() ."<br><br>";
-    echo "Database error (State: ".
+    echo "<br>Database error (State: ".
     $this->pdo->errorInfo()[0].
     " - Error: ".
     $this->pdo->errorInfo()[1].
     "): <br>".
     $this->pdo->errorInfo()[2];
 	if($die) { echo"die"; die(); }
+}
+
+function isDebug($value=null) {
+    global $debug;
+
+    //If the argument is provided, set the value
+    if($value) {
+        $debug = $value;
+    }
+
+    //Get the current value
+    return $debug;
 }
 
 ?>

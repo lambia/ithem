@@ -18,7 +18,7 @@ class db {
     public $name = "database";
     
     function __construct() {
-        echo "init $this->name<br>";
+        if( isDebug() ) { echo "Init: $this->name<br>"; }
         $settings = new settings;
         try { //B
             $this->pdo = new PDO('mysql:host='.
@@ -38,7 +38,8 @@ class db {
     }
     
     function __destruct() {
-        print "<br>Destroying " . $this->name;
+        if( isDebug() ) { echo "Destroy: $this->name<br>"; }
+
         if($this->pdo) {
             $this->pdo = null;
         }

@@ -5,9 +5,10 @@
 
 class page {
 	public $sons;
+    public $name = "page";
 
-	function __construct($pageid,$db) {
-		echo "init page<br>";
+	function __construct($db,$pageid) {
+        if( isDebug() ) { echo "Init: $this->name<br>"; }
 		//Initialize "controller"
 		//$db = new db();
 
@@ -23,6 +24,9 @@ class page {
 		}
 	}
 
+	function __destruct() {
+        if( isDebug() ) { echo "Destroy: $this->name<br>"; }
+	}
 }
 
 ?>
