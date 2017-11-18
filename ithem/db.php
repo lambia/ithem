@@ -1,62 +1,64 @@
-<?
+<?php
 /*
- * Vendor:      lambia
- * Namespace:   ithem
- * Class:       db
- * Version:     release-beta 0.1
- * Status:      sketch
- *
- * Author:      Lambia
- * Link:        lambia.it
- * Date:        06/10/2016
- *
- * @returns {string} $risultato - commento
- *
- * ToDo List
- * A. testare con il resultset vuoto
- * B. sostituire i die con if(debug){die}else{log}. stilizzare errori.
- * C. testare meglio questo check
- * E. magari chiuderlo nella funzione query, ma poi viene passato il vuoto. testare con memUsage, ma pare che php si liberi da solo
- * 
+ * NOW ************************************
+ *. htmlentities should not be done here
+ * THEN ***********************************
+ A. downgrade to ERRMODE_WARNING or silent should be done comparing with $settings->debug
+ B. dbdriver should be also a setting
+ C. persistent?
+ E. use if-else with prepare
+ *. memusage (see persistent(C))
  */
 
+//require_once "fx.php";
+//$x = new db();
+
 class db {
-    public $mysqli;
-    //public $result;
+    public $pdo;
+    public $name = "database";
     
     function __construct() {
+        echo "init $this->name<br>";
         $settings = new settings;
-        $this->mysqli = new mysqli($settings->db["host"],
-                                   $settings->db["user"],
-                                   $settings->db["pass"],
-                                   $settings->db["db"]);
-        if ($this->mysqli->connect_errno) {
-            die("Error: Connect failed.<br/>".$this->mysqli->connect_error."<br/>"); //B
-            exit();
+        try { //B
+            $this->pdo = new PDO('mysql:host='.
+                $settings->db["host"].
+                ';port='.
+                $settings->db["port"].
+                ';dbname='.
+                $settings->db["db"],
+                $settings->db["user"],
+                $settings->db["pass"],
+                array(PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                    PDO::ATTR_PERSISTENT => true) //A+C
+            );
+        } catch (PDOException $e) {
+            error( $e->getMessage() );
         }
     }
     
     function __destruct() {
-        //if(is_object($this->result) && !$this->mysqli->connect_errno && !$this->mysqli->error) { //E
-        //    $this->result->close(); //D
-        //}
-        if(is_object($this->mysqli) && !$this->mysqli->connect_errno && !$this->mysqli->error) { //C
-            $this->mysqli->close();
+        print "<br>Destroying " . $this->name;
+        if($this->pdo) {
+            $this->pdo = null;
         }
     }
     
     function query($query) {
-        if ($query && $result = $this->mysqli->query($query)) {
-            if ($result) {
-                //$this->result = $result; //E
-                //$result->close(); echo memory_get_usage() . "\n"; //E
-                return $result;
-            } else { return -1; }
-        } else {
-            die("Error: Wrong query syntax.<br/>".$this->mysqli->error."<br/>"); //B
-            return -1;
+        try {
+            //$result = $this->pdo->prepare($query);
+            //$result->execute();
+
+            $result = $this->pdo->query($query);
+            return $result->fetchAll();
+
+            //->fetchAll(PDO::FETCH_COLUMN, 0);
+            //->fetch(PDO::FETCH_ASSOC); //B
+
+        } catch (PDOException  $e) {
+            queryError($e);
         }
     }
-    
-    
 }
+
+?>

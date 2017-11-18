@@ -1,37 +1,60 @@
-<?
+<?php
 /*
- * Vendor:      lambia
- * Namespace:   ithem
- * Class:       settings
- * Version:     release-beta 0.1
- * Status:      sketch
- *
- * Author:      Lambia
- * Link:        lambia.it
- * Date:        06/10/2016
- *
- * @returns {string} $token - contiene la risposta in JSON
- *
- * ToDo List
- * A. Recuperare parametri durante il setup da un .ini e inserirli qui durante il setup
+ * NOW ************************************
+ B. Check if keys exists
+ * THEN ***********************************
+ A. Add a yesorno function
+ C. folder should be retrieved from THIS folder
+ D. if not [C] use at least getcwd() to guess the folder, otherwise must be changed manually when debugging this file
  */
+
+//require_once "fx.php";
+//$x = new settings();
  
 class settings {
-    public $versione = "0.1";
-    public $db = array("host"=>"localhost",
-                       "port"=>"3306",
-                       "user"=>"root",
-                       "pass"=>"",
-                       "db"=>"ithem_db"); //A
-    public $debug = false;
-    public $url = "http://localhost/";
+    //Let's say these are "constants"
+    public $name = "settings";
+    public $settingsFile = "ithem/settings.ini"; //C //D
+    //List of configurable stuff's names
+    public $cfgKeys   = array("ithem"=> array("version","debug","url"),
+                              "db"   => array("host","port","user","pass","db") );
+    //Configuration variables
+    public $version;
+    public $debug;
+    public $url;
+    public $db = array("host"=>null,"port"=>null,"user"=>null,"pass"=>null,"db"=>null);
 
     function __construct() {
-       //print "SONO VIVOOOO!\n";
+        echo "init settings<br>";
+      if ( file_exists($this->settingsFile) ) {
+        $settingsIni = parse_ini_file($this->settingsFile,true,INI_SCANNER_RAW);
+
+        //Assign settings or the default values //B
+        $this->version = $settingsIni["ithem"]["version"] ?: "0.2";
+        $this->debug = $settingsIni["ithem"]["debug"] ?: 0;
+        $this->url = $settingsIni["ithem"]["url"] ?: "http://localhost/";
+        $this->db["host"] = $settingsIni["db"]["host"] ?: 'localhost';
+        $this->db["port"] = $settingsIni["db"]["port"] ?: '3306';
+        $this->db["user"] = $settingsIni["db"]["user"] ?: 'root';
+        $this->db["pass"] = $settingsIni["db"]["pass"] ?: '';
+        $this->db["db"]   = $settingsIni["db"]["db"]   ?: 'ithems';
+
+        //Check roughly if everything is ok
+        if( array_diff(array_keys($settingsIni),          array_keys($this->cfgKeys)) ||
+            array_diff(array_keys($settingsIni["ithem"]), $this->cfgKeys["ithem"])    ||
+            array_diff(array_keys($settingsIni["db"]),    $this->cfgKeys["db"])       ){
+          warning("configuration file is shorter or longer than expected. Check it out.");
+        }
+
+      } else {
+        error("there is no settings file");
+      }
+
     }
     function __destruct() {
-       //print "Sto morendo, io.\n";
+      print "<br>Destroying " . $this->name . "<br>";
     }
 }
+
 
 ?>

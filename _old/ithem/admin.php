@@ -1,15 +1,5 @@
-<?
+<?php
 /*
- * Vendor:      lambia
- * Namespace:   ithem
- * Class:       admin (core)
- * Version:     release-beta 0.1
- * Status:      sketch
- *
- * Author:      Lambia
- * Link:        lambia.it
- * Date:        06/10/2016
- *
  * ToDo:        login
  * ToDo:        read/write db
  * ToDo:        in db insert elements with *type=head* elements (script, meta and so on)

@@ -1,32 +1,33 @@
-<?
+<?php
 /*
- * Vendor:      lambia
- * Namespace:   ithem
- * Class:       index (core)
- * Version:     release-beta 0.1
- * Status:      sketch
+ * if custom("wrong",..) OR user->query(".. FROM wrong...") -> error
+ * page use page_id not id
  *
- * Author:      Lambia
- * Link:        lambia.it
- * Date:        06/10/2016
+ * melt page and user
+ * should be ithem(1,...)->page/user->db OR page/user->db
+ * custom classes with custom db fields
+ * custom classes can override default one
  *
- * ToDo:        core->format has to return the string (not echo)
- * ToDo:        core->format has to accept $tabulation argument
- * ToDo:        core->format and get_list has to accept less parameters
- * ToDo:        in db -1 = 0 and 0 = 1
+ * recursive sons (menu ecc)
  *
+ * improve templating
+ * error handler -> template
+ *
+ * show/hide destructors by $settings->debug
+ * keep in memory (settings and db)
  */
 
-require_once "ithem/ithem.php";
-$core = new ithem($_SERVER['PHP_SELF']);
+require_once "ithem/fx.php";
+$db = new db();
+$page = new page(0,$db);
+$user = new user(1,$db);
+$user2= new custom("users",1,$db,"password");
 
-echo "<html>\n\t<head>\n\t\t<title>".$core->page["value"]."</title>\n\t</head>\n";
-echo "\t<body>\n";
-$core->format(null,null,"men",null,null);
-$core->format(null,null,"img",null,null);
-echo"\t</body>\n</html>";
-//$core->format(null,"fields","type","rel","order");
-//$core->format(null,null,null,null,null);
-//$core->format(null,null,"men",null,null);
+echo "<br><br>";
+print_r( $page->sons );
+echo "<br><br>";
+print_r( $user->sons );
+echo "<br><br>";
+print_r( $user2->sons );
 
 ?>
