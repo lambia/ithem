@@ -1,6 +1,6 @@
 <?php
 /*
-Name: Modulo Settings - Ithem CMS 
+Name: Modulo Settings - ithem CMS 
 Version: Draft
 Author: Bruno Paolillo
 Author URI: https://github.com/ziobru
