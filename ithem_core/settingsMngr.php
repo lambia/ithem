@@ -18,7 +18,7 @@ private $_backend_login;
 
 /*  
 
-@param $cdn_url - L'eventuale cartella o url che ospita il cdn di fogli di stile e file javascript.
+@param $cdn_url - L'eventuale cartella o url che ospita il cdn dei fogli di stile e dei file javascript.
 
 @param $backend_url - L'eventuale url della pagina di login del back-end o del front-end.
 
